@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pizzaria Forno de Ouro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#C8922A;--gold-light:#F5D98B;--dark:#1A1008;--text:#3D2B10;
+  --bg:#FFFDF7;--card-bg:#FFF8EE;--border:#E8D5B0;--red:#B83232;--green:#2E7D32;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text);}
+
+/* WHATSAPP FLOAT */
+.wa-float{
+  position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;
+  background:#25D366;color:#fff;border-radius:50px;
+  display:flex;align-items:center;gap:8px;padding:.7rem 1.2rem;
+  text-decoration:none;font-weight:700;font-size:.85rem;
+  box-shadow:0 4px 20px rgba(37,211,102,.4);
+  transition:transform .2s,box-shadow .2s;
+}
+.wa-float:hover{transform:scale(1.05);box-shadow:0 6px 28px rgba(37,211,102,.55);}
+.wa-float svg{width:22px;height:22px;flex-shrink:0;}
+
+/* NAV */
+nav{
+  background:var(--dark);padding:0 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;border-bottom:2px solid var(--gold);
+}
+.logo{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.4rem;padding:1rem 0;letter-spacing:1px;}
+.logo span{display:block;font-size:.65rem;color:var(--gold-light);letter-spacing:3px;font-family:'Lato',sans-serif;font-weight:300;text-transform:uppercase;}
+.nav-links{display:flex;gap:0;}
+.nav-links a{
+  color:#ccc;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;
+  padding:1.1rem .9rem;text-decoration:none;display:block;
+  border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--gold);border-bottom-color:var(--gold);}
+.nav-cart{
+  background:var(--gold);border:none;color:var(--dark);font-family:'Lato',sans-serif;
+  font-size:.8rem;font-weight:700;padding:.5rem 1rem;border-radius:4px;cursor:pointer;
+  letter-spacing:1px;display:flex;align-items:center;gap:6px;text-decoration:none;
+}
+.cart-count{background:var(--red);color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;display:flex;align-items:center;justify-content:center;}
+
+/* PAGES */
+.page{display:none;}
+.page.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* HERO */
+.hero{
+  background:linear-gradient(135deg,#1A1008 55%,#3D1F00 100%);
+  padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(ellipse at 70% 50%,rgba(200,146,42,.2) 0%,transparent 70%);
+}
+.hero-badge{
+  display:inline-block;background:rgba(200,146,42,.15);border:1px solid rgba(200,146,42,.4);
+  color:var(--gold-light);font-size:.72rem;letter-spacing:3px;text-transform:uppercase;
+  padding:.3rem 1rem;border-radius:20px;margin-bottom:1.2rem;position:relative;
+}
+.hero h1{font-family:'Playfair Display',serif;color:#fff;font-size:3.5rem;line-height:1.1;position:relative;margin-bottom:.5rem;}
+.hero h1 em{color:var(--gold);font-style:normal;}
+.hero p{color:#bbb;font-size:1rem;margin:.8rem 0 2rem;font-weight:300;letter-spacing:.5px;position:relative;}
+.hero-btns{display:flex;gap:1rem;justify-content:center;position:relative;flex-wrap:wrap;}
+.btn-primary{background:var(--gold);color:var(--dark);border:none;padding:.8rem 2rem;font-size:.9rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:1px;text-decoration:none;display:inline-block;transition:background .2s;}
+.btn-primary:hover{background:var(--gold-light);}
+.btn-outline{background:none;color:var(--gold);border:1.5px solid var(--gold);padding:.8rem 2rem;font-size:.9rem;border-radius:4px;cursor:pointer;letter-spacing:1px;text-decoration:none;display:inline-block;transition:background .2s;}
+.btn-outline:hover{background:rgba(200,146,42,.1);}
+
+/* FEATURES */
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;padding:3rem 2rem;max-width:960px;margin:0 auto;}
+.feature-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:1.8rem 1.5rem;text-align:center;}
+.feature-icon{font-size:2.2rem;margin-bottom:.7rem;}
+.feature-card h3{font-family:'Playfair Display',serif;font-size:1rem;color:var(--gold);margin-bottom:.4rem;}
+.feature-card p{font-size:.82rem;color:#999;line-height:1.5;}
+
+/* PROMOS */
+.promo-section{background:var(--dark);padding:3rem 2rem;text-align:center;}
+.promo-section h2{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.8rem;margin-bottom:.5rem;}
+.promo-section p{color:#bbb;font-size:.85rem;margin-bottom:2rem;}
+.promo-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;max-width:800px;margin:0 auto;}
+.promo-card{background:rgba(200,146,42,.08);border:1px solid rgba(200,146,42,.3);border-radius:8px;padding:1.2rem;}
+.promo-card h4{color:var(--gold-light);font-size:.9rem;margin-bottom:.3rem;}
+.promo-card p{color:#bbb;font-size:.78rem;}
+.promo-tag{background:var(--red);color:#fff;font-size:.65rem;padding:2px 8px;border-radius:20px;font-weight:700;display:inline-block;margin-bottom:.4rem;}
+
+/* SECTION TITLES */
+.section-title{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.8rem;text-align:center;padding:2.5rem 1rem .5rem;}
+.section-sub{text-align:center;color:#999;font-size:.85rem;margin-bottom:1.5rem;letter-spacing:1px;}
+
+/* CARDÁPIO */
+.cat-tabs{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;padding:0 1rem 1.5rem;}
+.cat-tab{background:none;border:1.5px solid var(--border);color:var(--text);padding:.4rem 1.1rem;border-radius:20px;cursor:pointer;font-size:.82rem;transition:all .2s;font-family:'Lato',sans-serif;}
+.cat-tab.active,.cat-tab:hover{background:var(--gold);border-color:var(--gold);color:var(--dark);font-weight:700;}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.4rem;padding:0 2rem 3rem;max-width:1100px;margin:0 auto;}
+.menu-item{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:transform .2s,box-shadow .2s;}
+.menu-item:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(200,146,42,.18);}
+.item-img{height:160px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#F5E8CC;}
+.item-img img{width:100%;height:100%;object-fit:cover;}
+.item-img .emoji-fallback{font-size:4rem;}
+.item-body{padding:1rem 1.1rem;}
+.item-name{font-family:'Playfair Display',serif;font-size:1rem;color:var(--text);margin-bottom:.3rem;}
+.item-desc{font-size:.78rem;color:#999;line-height:1.4;margin-bottom:.8rem;}
+.item-footer{display:flex;align-items:center;justify-content:space-between;}
+.item-price{font-weight:700;color:var(--gold);font-size:1.1rem;}
+.add-btn{background:var(--gold);border:none;color:var(--dark);width:32px;height:32px;border-radius:50%;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;transition:background .2s;line-height:1;}
+.add-btn:hover{background:var(--gold-light);}
+.item-tag{display:inline-block;background:#FFF0D0;color:var(--gold);font-size:.63rem;padding:2px 7px;border-radius:20px;margin-right:4px;font-weight:700;letter-spacing:.5px;}
+
+/* PEDIDO */
+.order-wrap{max-width:720px;margin:0 auto;padding:2rem;}
+.order-section{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem;}
+.order-section h3{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.1rem;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem;}
+.form-row.full{grid-template-columns:1fr;}
+.form-group{display:flex;flex-direction:column;gap:4px;}
+.form-group label{font-size:.75rem;color:#999;letter-spacing:.5px;text-transform:uppercase;}
+.form-group input,.form-group select,.form-group textarea{
+  background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:.65rem .9rem;
+  font-family:'Lato',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:border .2s;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold);}
+.delivery-toggle{display:flex;gap:.8rem;}
+.d-opt{flex:1;border:1.5px solid var(--border);border-radius:6px;padding:.7rem;text-align:center;cursor:pointer;font-size:.85rem;transition:all .2s;}
+.d-opt.sel{border-color:var(--gold);background:#FFF5DC;color:var(--gold);font-weight:700;}
+.cart-row{display:flex;align-items:center;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--border);font-size:.88rem;}
+.cart-row:last-child{border-bottom:none;}
+.cart-total{display:flex;justify-content:space-between;font-weight:700;font-size:1.05rem;margin-top:.8rem;color:var(--gold);}
+.empty-cart{text-align:center;color:#bbb;font-size:.85rem;padding:1.5rem;}
+.submit-btn{width:100%;background:var(--gold);border:none;color:var(--dark);padding:1rem;font-size:1rem;font-weight:700;border-radius:8px;cursor:pointer;letter-spacing:1px;margin-top:.5rem;transition:background .2s;font-family:'Lato',sans-serif;}
+.submit-btn:hover{background:var(--gold-light);}
+
+/* RASTREAR */
+.tracking-wrap{max-width:600px;margin:0 auto;padding:2rem;}
+.track-input-row{display:flex;gap:.5rem;margin-bottom:2rem;}
+.track-input-row input{flex:1;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:.7rem 1rem;font-family:'Lato',sans-serif;font-size:.9rem;color:var(--text);outline:none;}
+.track-input-row input:focus{border-color:var(--gold);}
+.track-btn{background:var(--gold);border:none;color:var(--dark);padding:.7rem 1.5rem;border-radius:6px;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif;}
+.timeline{position:relative;padding-left:2.2rem;}
+.timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:var(--border);}
+.t-step{position:relative;margin-bottom:2rem;}
+.t-dot{position:absolute;left:-2.1rem;width:22px;height:22px;border-radius:50%;border:2px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;top:2px;}
+.t-dot.done{background:var(--gold);border-color:var(--gold);}
+.t-dot.active{background:var(--bg);border-color:var(--gold);box-shadow:0 0 0 5px rgba(200,146,42,.2);}
+.t-label{font-size:.9rem;font-weight:700;color:var(--text);}
+.t-label.done{color:var(--gold);}
+.t-label.muted{color:#bbb;font-weight:400;}
+.t-sub{font-size:.76rem;color:#aaa;margin-top:3px;}
+.t-check{color:#fff;font-size:10px;font-weight:900;}
+.est-badge{background:#FFF5DC;border:1px solid var(--gold-light);color:var(--gold);border-radius:10px;padding:1rem 1.5rem;text-align:center;margin-bottom:2rem;}
+.est-badge strong{font-size:1.5rem;display:block;font-family:'Playfair Display',serif;}
+
+/* AVALIAÇÕES */
+.reviews-wrap{max-width:720px;margin:0 auto;padding:2rem;}
+.rating-summary{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:1.8rem;margin-bottom:2rem;display:flex;align-items:center;gap:2.5rem;}
+.big-rating{text-align:center;min-width:80px;}
+.big-num{font-family:'Playfair Display',serif;font-size:4rem;color:var(--gold);line-height:1;}
+.stars-row{color:var(--gold);font-size:1.2rem;margin:.2rem 0;}
+.big-count{font-size:.75rem;color:#aaa;}
+.bars{flex:1;}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:.78rem;color:#aaa;}
+.bar-track{flex:1;background:var(--border);border-radius:4px;height:8px;}
+.bar-fill{height:8px;border-radius:4px;background:var(--gold);}
+.review-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:1.2rem 1.5rem;margin-bottom:1rem;}
+.review-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;}
+.reviewer{font-weight:700;font-size:.9rem;}
+.rev-stars{color:var(--gold);font-size:.9rem;}
+.rev-date{font-size:.72rem;color:#bbb;}
+.rev-text{font-size:.85rem;color:#777;line-height:1.5;margin-top:.3rem;}
+.write-review{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-top:2rem;}
+.write-review h3{font-family:'Playfair Display',serif;color:var(--gold);margin-bottom:1rem;}
+.star-select{display:flex;gap:6px;margin-bottom:1rem;}
+.star-select span{font-size:1.8rem;cursor:pointer;color:#ddd;transition:color .15s;}
+.star-select span.lit{color:var(--gold);}
+.send-review{background:var(--gold);border:none;color:var(--dark);padding:.65rem 1.5rem;border-radius:6px;font-weight:700;cursor:pointer;margin-top:.8rem;font-family:'Lato',sans-serif;}
+
+/* SOBRE */
+.sobre-wrap{max-width:760px;margin:0 auto;padding:2rem;}
+.sobre-hero{background:var(--dark);border-radius:14px;padding:3rem;text-align:center;margin-bottom:2rem;}
+.sobre-hero h2{font-family:'Playfair Display',serif;color:var(--gold);font-size:2rem;margin-bottom:.7rem;}
+.sobre-hero p{color:#ccc;font-size:.9rem;line-height:1.7;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+.info-card{background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.4rem;}
+.info-card h4{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:#aaa;margin-bottom:.5rem;}
+.info-card p{font-size:.9rem;color:var(--text);line-height:1.6;}
+.info-card p strong{color:var(--gold);}
+.wa-contact-big{
+  display:flex;align-items:center;justify-content:center;gap:.8rem;
+  background:#25D366;color:#fff;border-radius:10px;padding:1.2rem;
+  text-decoration:none;font-weight:700;font-size:1rem;
+  transition:filter .2s;margin-top:1rem;
+}
+.wa-contact-big:hover{filter:brightness(1.1);}
+.wa-contact-big svg{width:28px;height:28px;flex-shrink:0;}
+
+/* CONTATO */
+.contato-wrap{max-width:700px;margin:0 auto;padding:2rem;}
+.contato-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:2rem;margin-bottom:1.2rem;text-align:center;}
+.contato-card h3{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.2rem;margin-bottom:.5rem;}
+.contato-card p{font-size:.88rem;color:#888;line-height:1.5;margin-bottom:1.2rem;}
+.wa-big{
+  display:inline-flex;align-items:center;gap:.7rem;
+  background:#25D366;color:#fff;border-radius:8px;padding:.8rem 1.8rem;
+  text-decoration:none;font-weight:700;font-size:.95rem;transition:filter .2s;
+}
+.wa-big:hover{filter:brightness(1.1);}
+.wa-big svg{width:22px;height:22px;}
+.contato-info{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem;}
+.ci{background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:1rem;text-align:center;}
+.ci h4{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:#aaa;margin-bottom:.4rem;}
+.ci p{font-size:.9rem;color:var(--text);}
+.ci p strong{color:var(--gold);}
+
+/* TOAST */
+.toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);background:var(--dark);color:var(--gold);border:1px solid var(--gold);border-radius:8px;padding:.7rem 1.4rem;font-size:.85rem;font-weight:700;opacity:0;transition:opacity .3s;z-index:9998;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;}
+
+/* FOOTER */
+footer{background:var(--dark);border-top:1px solid rgba(200,146,42,.3);padding:2rem;text-align:center;}
+footer p{color:#666;font-size:.8rem;}
+footer p span{color:var(--gold);}
+
+@media(max-width:700px){
+  .hero h1{font-size:2.3rem;}
+  .features{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .info-grid,.contato-info{grid-template-columns:1fr;}
+  .rating-summary{flex-direction:column;gap:1rem;}
+  nav{padding:0 1rem;}
+  .nav-links a{padding:1.1rem .55rem;font-size:.7rem;}
+  .logo{font-size:1.1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- WHATSAPP FLUTUANTE -->
+<a href="https://wa.me/5581984061628?text=Olá!%20Vim%20pelo%20site%20da%20Pizzaria%20Forno%20de%20Ouro%20e%20gostaria%20de%20fazer%20um%20pedido%20😊" target="_blank" class="wa-float" title="Fale conosco no WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  Fale Conosco
+</a>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">Forno de Ouro<span>Pizzaria Artesanal</span></div>
+  <div class="nav-links">
+    <a href="#" class="active" onclick="showPage('home',this)">Início</a>
+    <a href="#" onclick="showPage('cardapio',this)">Cardápio</a>
+    <a href="#" onclick="showPage('pedido',this)">Pedido</a>
+    <a href="#" onclick="showPage('tracking',this)">Rastrear</a>
+    <a href="#" onclick="showPage('reviews',this)">Avaliações</a>
+    <a href="#" onclick="showPage('contato',this)">Contato</a>
+  </div>
+  <a href="#" class="nav-cart" onclick="showPage('pedido', document.querySelectorAll('.nav-links a')[2]);return false;">
+    🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
+  </a>
+</nav>
+
+<!-- ===== HOME ===== -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-badge">🔥 Aberto agora · Entrega 25–45 min</div>
+    <h1>A Melhor Pizza<br>do <em>Bairro</em></h1>
+    <p>Massa artesanal · Forno a lenha · Ingredientes selecionados</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-primary" onclick="showPage('cardapio', document.querySelectorAll('.nav-links a')[1]);return false;">Ver Cardápio</a>
+      <a href="https://wa.me/5581984061628?text=Olá!%20Quero%20fazer%20um%20pedido%20na%20Pizzaria%20Forno%20de%20Ouro%20🍕" target="_blank" class="btn-outline">Pedir pelo WhatsApp</a>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">🔥</div>
+      <h3>Forno a Lenha</h3>
+      <p>Pizza assada no forno a lenha para o sabor autêntico e crocante de sempre.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🛵</div>
+      <h3>Entrega Rápida</h3>
+      <p>Acompanhe seu pedido em tempo real, do forno até a sua porta.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⭐</div>
+      <h3>4.8 de Avaliação</h3>
+      <p>Mais de 300 clientes satisfeitos. Venha ser o próximo!</p>
+    </div>
+  </div>
+
+  <div class="promo-section">
+    <h2>Promoções da Semana</h2>
+    <p>Aproveite nossas ofertas especiais</p>
+    <div class="promo-cards">
+      <div class="promo-card">
+        <div class="promo-tag">2ª FEIRA</div>
+        <h4>Pizza + Refrigerante</h4>
+        <p>Qualquer pizza grande + 2 latas por R$ 55,00</p>
+      </div>
+      <div class="promo-card">
+        <div class="promo-tag">SEMANA</div>
+        <h4>Frete Grátis</h4>
+        <p>Pedidos acima de R$ 80,00 com frete grátis</p>
+      </div>
+      <div class="promo-card">
+        <div class="promo-tag">FIM DE SEMANA</div>
+        <h4>2ª Pizza 50% Off</h4>
+        <p>Na compra de 2 pizzas, a segunda leva 50% desconto</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CARDÁPIO ===== -->
+<div class="page" id="page-cardapio">
+  <h2 class="section-title">Nosso Cardápio</h2>
+  <p class="section-sub">Ingredientes frescos, sabor de verdade</p>
+  <div class="cat-tabs">
+    <button class="cat-tab active" onclick="filterMenu('todos',this)">Todos</button>
+    <button class="cat-tab" onclick="filterMenu('pizzas',this)">Pizzas</button>
+    <button class="cat-tab" onclick="filterMenu('bebidas',this)">Bebidas</button>
+    <button class="cat-tab" onclick="filterMenu('sobremesas',this)">Sobremesas</button>
+  </div>
+  <div class="menu-grid" id="menuGrid"></div>
+</div>
+
+<!-- ===== PEDIDO ===== -->
+<div class="page" id="page-pedido">
+  <h2 class="section-title">Fazer Pedido</h2>
+  <p class="section-sub">Preencha os dados e finalize seu pedido</p>
+  <div class="order-wrap">
+    <div class="order-section">
+      <h3>Tipo de Entrega</h3>
+      <div class="delivery-toggle">
+        <div class="d-opt sel" id="dEntrega" onclick="selectDelivery('entrega')">🛵 Entrega em casa</div>
+        <div class="d-opt" id="dRetirada" onclick="selectDelivery('retirada')">🏪 Retirar na loja</div>
+      </div>
+    </div>
+    <div class="order-section" id="addressSection">
+      <h3>Endereço de Entrega</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Rua</label><input type="text" placeholder="Ex: Rua das Flores" id="fRua"></div>
+        <div class="form-group"><label>Número</label><input type="text" placeholder="123" id="fNum"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Bairro</label><input type="text" placeholder="Seu bairro" id="fBairro"></div>
+        <div class="form-group"><label>Complemento</label><input type="text" placeholder="Apto, bloco..." id="fComp"></div>
+      </div>
+    </div>
+    <div class="order-section">
+      <h3>Seus Dados</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Nome</label><input type="text" placeholder="Seu nome completo" id="fNome"></div>
+        <div class="form-group"><label>Telefone</label><input type="text" placeholder="(81) 99999-0000" id="fTel"></div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group"><label>Observações</label><textarea rows="2" placeholder="Sem cebola, mais queijo..." id="fObs" style="resize:vertical;"></textarea></div>
+      </div>
+    </div>
+    <div class="order-section">
+      <h3>Pagamento</h3>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Forma de Pagamento</label>
+          <select id="fPagto">
+            <option>Cartão de Crédito</option>
+            <option>Cartão de Débito</option>
+            <option>Pix</option>
+            <option>Dinheiro</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="order-section">
+      <h3>Resumo do Pedido</h3>
+      <div id="cartItems"><div class="empty-cart">Seu carrinho está vazio. Adicione itens no Cardápio!</div></div>
+      <div class="cart-total" id="cartTotal" style="display:none">
+        <span>Total</span><span id="totalVal">R$ 0,00</span>
+      </div>
+    </div>
+    <button class="submit-btn" onclick="submitOrder()">✔ Confirmar Pedido</button>
+  </div>
+</div>
+
+<!-- ===== RASTREAR ===== -->
+<div class="page" id="page-tracking">
+  <h2 class="section-title">Acompanhar Pedido</h2>
+  <p class="section-sub">Informe o número do seu pedido</p>
+  <div class="tracking-wrap">
+    <div class="track-input-row">
+      <input type="text" id="trackCode" placeholder="Ex: FO-2024-001" value="FO-2024-042">
+      <button class="track-btn" onclick="trackOrder()">Rastrear</button>
+    </div>
+    <div id="trackResult" style="display:none">
+      <div class="est-badge">
+        Previsão de entrega<strong id="etaTime">~30 minutos</strong>
+      </div>
+      <div class="timeline" id="timeline"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== AVALIAÇÕES ===== -->
+<div class="page" id="page-reviews">
+  <h2 class="section-title">Avaliações</h2>
+  <p class="section-sub">O que nossos clientes dizem</p>
+  <div class="reviews-wrap">
+    <div class="rating-summary">
+      <div class="big-rating">
+        <div class="big-num">4.8</div>
+        <div class="stars-row">★★★★★</div>
+        <div class="big-count">312 avaliações</div>
+      </div>
+      <div class="bars" id="ratingBars"></div>
+    </div>
+    <div id="reviewsList"></div>
+    <div class="write-review">
+      <h3>Deixe sua Avaliação</h3>
+      <div class="star-select" id="starSelect">
+        <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span>
+        <span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span>
+        <span onclick="setStars(5)">★</span>
+      </div>
+      <div class="form-group"><label>Seu nome</label><input type="text" id="revName" placeholder="Seu nome"></div>
+      <div class="form-group" style="margin-top:.7rem"><label>Comentário</label>
+        <textarea rows="3" id="revText" placeholder="Conte como foi sua experiência..." style="resize:vertical;width:100%;margin-top:4px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:.65rem .9rem;font-family:'Lato',sans-serif;font-size:.88rem;color:var(--text);outline:none;transition:border .2s;"></textarea>
+      </div>
+      <button class="send-review" onclick="sendReview()">Enviar Avaliação</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONTATO ===== -->
+<div class="page" id="page-contato">
+  <h2 class="section-title">Fale Conosco</h2>
+  <p class="section-sub">Estamos prontos para atender você</p>
+  <div class="contato-wrap">
+    <div class="contato-card">
+      <h3>💬 WhatsApp</h3>
+      <p>Clique abaixo para falar diretamente com a gente pelo WhatsApp.<br>Atendemos pedidos, dúvidas e sugestões!</p>
+      <a href="https://wa.me/5581984061628?text=Olá!%20Vim%20pelo%20site%20da%20Pizzaria%20Forno%20de%20Ouro%20e%20gostaria%20de%20fazer%20um%20pedido%20🍕" target="_blank" class="wa-big">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Chamar no WhatsApp
+      </a>
+    </div>
+    <div class="contato-info">
+      <div class="ci"><h4>Telefone / WhatsApp</h4><p><strong>(81) 98406-1628</strong></p></div>
+      <div class="ci"><h4>Localização</h4><p>Cabo de Santo Agostinho, PE</p></div>
+      <div class="ci"><h4>Seg – Sex</h4><p><strong>18h às 23h</strong></p></div>
+      <div class="ci"><h4>Sáb – Dom</h4><p><strong>17h às 00h</strong></p></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 <span>Pizzaria Forno de Ouro</span> · Cabo de Santo Agostinho, PE · Todos os direitos reservados</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const WA = 'https://wa.me/5581984061628';
+
+const menuData = [
+  {id:1,cat:'pizzas',nome:'Margherita Clássica',desc:'Molho de tomate, mozzarella fresca e manjericão',preco:42,tag:'Top',img:'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&q=80'},
+  {id:2,cat:'pizzas',nome:'Calabresa Especial',desc:'Calabresa artesanal, cebola roxa caramelizada e azeitona preta',preco:45,tag:'',img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80'},
+  {id:3,cat:'pizzas',nome:'Quatro Queijos',desc:'Mozzarella, provolone, parmesão e gorgonzola',preco:52,tag:'Top',img:'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80'},
+  {id:4,cat:'pizzas',nome:'Frango & Catupiry',desc:'Frango desfiado, catupiry original e milho verde',preco:48,tag:'',img:'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=400&q=80'},
+  {id:5,cat:'pizzas',nome:'Portuguesa',desc:'Presunto, ovos, cebola, azeitona e mozzarella',preco:47,tag:'',img:'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&q=80'},
+  {id:6,cat:'pizzas',nome:'Pepperoni',desc:'Pepperoni importado generoso e queijo mozzarella fatiado',preco:54,tag:'Novo',img:'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?w=400&q=80'},
+  {id:7,cat:'bebidas',nome:'Refrigerante Lata',desc:'Coca-Cola, Guaraná ou Sprite 350ml',preco:6,tag:'',img:'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&q=80'},
+  {id:8,cat:'bebidas',nome:'Suco Natural',desc:'Maracujá, goiaba ou laranja 500ml',preco:10,tag:'',img:'https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&q=80'},
+  {id:9,cat:'bebidas',nome:'Água Mineral',desc:'500ml com ou sem gás',preco:4,tag:'',img:'https://images.unsplash.com/photo-1564419320461-6870880221ad?w=400&q=80'},
+  {id:10,cat:'sobremesas',nome:'Pudim de Leite',desc:'Pudim caseiro com calda de caramelo dourado',preco:12,tag:'',img:'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&q=80'},
+  {id:11,cat:'sobremesas',nome:'Brownie com Sorvete',desc:'Brownie quente com sorvete de creme artesanal',preco:16,tag:'Novo',img:'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&q=80'},
+];
+
+let cart=[], selectedStars=0, deliveryType='entrega';
+let reviews=[
+  {nome:'Carlos M.',stars:5,texto:'A melhor pizza que já comi! Massa perfeita e entrega super rápida.',data:'12/04/2026'},
+  {nome:'Ana Souza',stars:5,texto:'Quatro queijos divina! Já pedi três vezes essa semana.',data:'10/04/2026'},
+  {nome:'Rafael T.',stars:4,texto:'Muito boa! O atendimento é excelente. Só demorou um pouquinho mais que o esperado.',data:'08/04/2026'},
+];
+
+function showPage(id,btn){
+  event && event.preventDefault && event.preventDefault();
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  if(id==='cardapio') renderMenu('todos');
+  if(id==='reviews') renderReviews();
+  window.scrollTo(0,0);
+  return false;
+}
+
+function filterMenu(cat,btn){
+  document.querySelectorAll('.cat-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMenu(cat);
+}
+
+function renderMenu(cat){
+  const grid=document.getElementById('menuGrid');
+  const items=cat==='todos'?menuData:menuData.filter(i=>i.cat===cat);
+  grid.innerHTML=items.map(i=>`
+    <div class="menu-item">
+      <div class="item-img">
+        <img src="${i.img}" alt="${i.nome}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="emoji-fallback" style="display:none">${i.cat==='pizzas'?'🍕':i.cat==='bebidas'?'🥤':'🍮'}</div>
+      </div>
+      <div class="item-body">
+        <div class="item-name">${i.nome}${i.tag?` <span class="item-tag">${i.tag}</span>`:''}</div>
+        <div class="item-desc">${i.desc}</div>
+        <div class="item-footer">
+          <span class="item-price">R$ ${i.preco.toFixed(2).replace('.',',')}</span>
+          <button class="add-btn" onclick="addToCart(${i.id})" title="Adicionar ao carrinho">+</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function addToCart(id){
+  const item=menuData.find(i=>i.id===id);
+  const existing=cart.find(i=>i.id===id);
+  if(existing) existing.qty++;
+  else cart.push({...item,qty:1});
+  updateCartCount();
+  showToast(`${item.nome} adicionado! 🍕`);
+  renderCartItems();
+}
+
+function updateCartCount(){
+  document.getElementById('cartCount').textContent=cart.reduce((s,i)=>s+i.qty,0);
+}
+
+function renderCartItems(){
+  const el=document.getElementById('cartItems');
+  const tot=document.getElementById('cartTotal');
+  const totVal=document.getElementById('totalVal');
+  if(!cart.length){
+    el.innerHTML='<div class="empty-cart">Seu carrinho está vazio. Adicione itens no Cardápio!</div>';
+    tot.style.display='none';return;
+  }
+  el.innerHTML=cart.map(i=>`
+    <div class="cart-row">
+      <span>${i.nome} x${i.qty}</span>
+      <span style="font-weight:700;color:var(--gold)">R$ ${(i.preco*i.qty).toFixed(2).replace('.',',')}</span>
+    </div>`).join('');
+  const taxa=deliveryType==='entrega'?5:0;
+  const total=cart.reduce((s,i)=>s+i.preco*i.qty,0)+taxa;
+  totVal.textContent=`R$ ${total.toFixed(2).replace('.',',')}${taxa?' (incl. R$ 5,00 taxa)':''}`;
+  tot.style.display='flex';
+}
+
+function selectDelivery(type){
+  deliveryType=type;
+  document.getElementById('dEntrega').classList.toggle('sel',type==='entrega');
+  document.getElementById('dRetirada').classList.toggle('sel',type==='retirada');
+  document.getElementById('addressSection').style.display=type==='entrega'?'block':'none';
+  renderCartItems();
+}
+
+function submitOrder(){
+  if(!cart.length){showToast('Adicione itens ao carrinho primeiro!');return;}
+  const nome=document.getElementById('fNome').value.trim();
+  if(!nome){showToast('Informe seu nome!');return;}
+  const rua=document.getElementById('fRua').value.trim();
+  const bairro=document.getElementById('fBairro').value.trim();
+  const tel=document.getElementById('fTel').value.trim();
+  const pagto=document.getElementById('fPagto').value;
+  const obs=document.getElementById('fObs').value.trim();
+  const itens=cart.map(i=>`${i.nome} x${i.qty} (R$${(i.preco*i.qty).toFixed(2)})`).join(', ');
+  const total=cart.reduce((s,i)=>s+i.preco*i.qty,0)+(deliveryType==='entrega'?5:0);
+  let msg=`Olá! Quero fazer um pedido 🍕%0A%0A*Nome:* ${encodeURIComponent(nome)}%0A*Telefone:* ${encodeURIComponent(tel)}%0A*Entrega:* ${deliveryType==='entrega'?`${encodeURIComponent(rua)}, ${encodeURIComponent(bairro)}`:'Retirada na loja'}%0A*Itens:* ${encodeURIComponent(itens)}%0A*Pagamento:* ${encodeURIComponent(pagto)}%0A*Total:* R$ ${total.toFixed(2)}${obs?`%0A*Obs:* ${encodeURIComponent(obs)}`:''}`;
+  window.open(`${WA}?text=${msg}`,'_blank');
+  showToast('Redirecionando para o WhatsApp! 🎉');
+  cart=[];updateCartCount();renderCartItems();
+}
+
+const steps=[
+  {label:'Pedido recebido',sub:'Seu pedido foi confirmado com sucesso',done:true,active:false},
+  {label:'Em preparo',sub:'Nossa equipe está preparando sua pizza',done:true,active:false},
+  {label:'No forno',sub:'Assando no forno a lenha — quase pronto!',done:false,active:true},
+  {label:'Saiu para entrega',sub:'O entregador está a caminho',done:false,active:false},
+  {label:'Entregue',sub:'Bom apetite! 🍕',done:false,active:false},
+];
+
+function trackOrder(){
+  document.getElementById('trackResult').style.display='block';
+  const tl=document.getElementById('timeline');
+  tl.innerHTML=steps.map(s=>`
+    <div class="t-step">
+      <div class="t-dot ${s.done?'done':s.active?'active':''}">
+        ${s.done?'<span class="t-check">✓</span>':''}
+      </div>
+      <div class="t-label ${s.done?'done':s.active?'':'muted'}">${s.label}</div>
+      <div class="t-sub">${s.sub}</div>
+    </div>`).join('');
+}
+
+const ratingDist=[[5,248],[4,45],[3,12],[2,5],[1,2]];
+
+function renderReviews(){
+  document.getElementById('ratingBars').innerHTML=ratingDist.map(([s,c])=>`
+    <div class="bar-row">
+      <span>${s}★</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(c/312*100)}%"></div></div>
+      <span>${c}</span>
+    </div>`).join('');
+  document.getElementById('reviewsList').innerHTML=reviews.map(r=>`
+    <div class="review-card">
+      <div class="review-top">
+        <span class="reviewer">${r.nome}</span>
+        <span class="rev-date">${r.data}</span>
+      </div>
+      <div class="rev-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+      <div class="rev-text">${r.texto}</div>
+    </div>`).join('');
+}
+
+function setStars(n){
+  selectedStars=n;
+  document.querySelectorAll('#starSelect span').forEach((s,i)=>s.classList.toggle('lit',i<n));
+}
+
+function sendReview(){
+  const nome=document.getElementById('revName').value.trim();
+  const texto=document.getElementById('revText').value.trim();
+  if(!nome||!texto||!selectedStars){showToast('Preencha todos os campos!');return;}
+  reviews.unshift({nome,stars:selectedStars,texto,data:new Date().toLocaleDateString('pt-BR')});
+  document.getElementById('revName').value='';
+  document.getElementById('revText').value='';
+  setStars(0);
+  renderReviews();
+  showToast('Avaliação enviada! Obrigado ❤️');
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+renderMenu('todos');
+renderReviews();
+</script>
+</body>
+</html>
